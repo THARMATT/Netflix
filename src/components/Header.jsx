@@ -27,7 +27,4 @@ button{
     cursor:pointer;
     color:white;
     border-radius:.2rem;
-
-
-
 }`;
