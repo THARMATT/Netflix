@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FaPowerOff, FaSearch } from "react-icons/fa";
+import {onAuthStateChanged, signOut} from 'firebase/auth'
+import {firebaseAuth} from '../utils/firebase-config'
 export default function Navbar({ isScrolled }) {
+    const navigate = useNavigate();
   const links = [
     { name: "Home", link: "/" },
     { name: "TV", link: "/tv" },
@@ -11,11 +14,15 @@ export default function Navbar({ isScrolled }) {
     { name: "My List", link: "/mylist" },
   ];
 
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if (!currentUser) navigate("/login");
+  });
+
   const [showSearch, setshowSearch] = useState(false);
   const [inputHover, setInputHover] = useState(false);
   return (
     <Container>
-      <nav className={`flex ${isScrolled ? "scolled" : ""}`}>
+      <nav className={`flex ${isScrolled ? "scrolled" : ""}`}>
         <div className="left flex a-center">
           <div className="brand flex a-center j-center">
             <img src={logo} alt="logo" />
@@ -64,7 +71,7 @@ export default function Navbar({ isScrolled }) {
           </div>
           <button
             onClick={() => {
-              // signOut(firebaseAuth)
+              signOut(firebaseAuth)
             }}
           >
             <FaPowerOff />
@@ -105,6 +112,7 @@ nav{
         }
     }
     .right{
+        padding:2rem;
         gap:1rem;
         button{
             background-color:transparent;
