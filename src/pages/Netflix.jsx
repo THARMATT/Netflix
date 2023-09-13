@@ -17,7 +17,7 @@ export default function Netflix() {
 
   const genresLoaded=useSelector((state)=>state.netflix.genresLoaded)
   const movies=useSelector((state)=>state.netflix.movies);
-  console.log("movies from store",movies)
+  // console.log("movies from store",movies)
   // console.log(movies);
 
   useEffect(()=>{
@@ -34,7 +34,7 @@ export default function Netflix() {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
   };
-  console.log(movies)
+  // console.log(movies)
   return (
     <Container>
       <Navbar isScrolled={isScrolled} />
