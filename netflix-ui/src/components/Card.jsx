@@ -7,10 +7,33 @@ import { BsCheck } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
 import styled from "styled-components";
-
+import { onAuthStateChanged} from "firebase/auth";
+import axios from 'axios';
+import { firebaseAuth } from "../utils/firebase-config";
+import { useDispatch } from "react-redux";
+import { removeMovieFromLiked } from "../store";
+// import { removeFromLikedMovies } from "../../../netflix-api/controllers/UserController";
 export default function Card({ movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [email, setEmail] = useState(undefined)
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+   
+    if (currentUser) {setEmail(currentUser.email);}
+    else {navigate("/login")}
+   
+  });
+
+  const addToList=async()=>{
+try {
+  await axios.get("http://localhost:5000/api/user/add",{email,data:movieData })
+} catch (error) {
+  
+}
+
+  }
+
   return (
     <Container
       onMouseEnter={() => setIsHovered(true)}
@@ -27,7 +50,7 @@ export default function Card({ movieData, isLiked = false }) {
             />
             <video
               src={video}
-              autoPLay
+              autoPlay
               loop
               muted
               onClick={() => navigate("/player")}
@@ -46,9 +69,9 @@ export default function Card({ movieData, isLiked = false }) {
                 <RiThumbUpFill title="Like" />
                 <RiThumbDownFill title="Dislike" />
                 {isLiked ? (
-                  <BsCheck title="Remove From List" />
+                  <BsCheck title="Remove From List" onClick={()=>dispatch(removeMovieFromLiked({movieId:movieData.id,email}))}/>
                 ) : (
-                  <AiOutlinePlus title="Add to My List" />
+                  <AiOutlinePlus title="Add to My List" onClick={addToList} />
                 )}
               </div>
               <div className="More Info">
