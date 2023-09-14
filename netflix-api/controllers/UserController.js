@@ -22,11 +22,13 @@ module.exports.addToLikedMovies = async (req, res) => {
         else await User.create({ email, likedMovies: [data] })
         return res.json({ msg: "movie added successfully" })
     } catch (error) {
+        console.log(error)
         return res.json({ message: "error adding movie" })
+     
     }
 };
 
-module.exports.getLikedMovies = async (req, user) => {
+module.exports.getLikedMovies = async (req, res) => {
     try {
 
         const { email } = req.params;
@@ -44,24 +46,25 @@ module.exports.getLikedMovies = async (req, user) => {
 }
 module.exports.removeFromLikedMovies = async (req, res) => {
     try {
-
         const { email, movieId } = req.body;
         const user = await User.findOne({ email });
         if (user) {
             const { likedMovies } = user;
             const movieIndex = likedMovies.findIndex(({ id }) => id === movieId)
-            if (!movieIndex) res.status(400).send({ msg: "movie not found" })
-            likedMovies.splice(movieIndex, 1)
+            if (!movieIndex) {
+                return res.status(400).json({ msg: "movie not found" });
+            }
+            likedMovies.splice(movieIndex, 1);
             await User.findByIdAndUpdate(
                 user._id, {
-                likedMovies,
-            },
+                    likedMovies,
+                },
                 { new: true }
             );
-            return res.json({msg:"Movie Remvoed successfully",movies:likedMovies})
+            return res.json({ msg: "Movie Removed successfully", movies: likedMovies });
         }
-
     } catch (error) {
-        return res.json({ message: "error deleting movie" })
+        console.log(error)
+        return res.json({ message: "error deleting movie" });
     }
 }

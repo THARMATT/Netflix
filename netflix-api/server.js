@@ -15,4 +15,4 @@ mongoose.connect("mongodb+srv://Netflix:clone@cluster0.s47spvc.mongodb.net/?retr
 });
 
 app.use("/api/user",userRoutes)
-app.listen( PORT,console.log("server STarted"))
+app.listen( PORT,console.log(`server started at ${PORT}`))
