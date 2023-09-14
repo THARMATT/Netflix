@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-transform-object-rest-spread": "^7.22.15"
+    "@babel/plugin-transform-object-rest-spread": "^7.22.15",
+    "eslint": "^8.49.0"
   }
 }
